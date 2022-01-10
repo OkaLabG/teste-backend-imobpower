@@ -1,0 +1,348 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API - Teste Back-end",
+    "description": "Teste para candidatos à vaga de desenvolvedor Back-end",
+    "contact": {
+      "email": "brunohqsantos@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+
+  "servers": [
+    {
+      "url": "http://localhost:3333/",
+      "description": "API - Teste"
+    }
+  ],
+
+  "paths": {
+    "/users":{
+      "post": {
+        "summary": "Cadastro de Usuário",
+        "description": "Esta rota é responsável por cadastrar um novo usuário na base de dados",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Nome completo do usuáiro",
+            "required": true
+          },
+          {
+            "name": "age",
+            "in": "query",
+            "type": "number",
+            "description": "Idade do usuáiro",
+            "required": true
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "E-mail do usuáiro",
+            "required": true
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "Senha do usuáiro",
+            "required": true
+          },
+          {
+            "name": "phone_number",
+            "in": "query",
+            "description": "Numero de telefone do usuáiro",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "name": "Nome Completo",
+                    "age": 21,
+                    "email": "teste@email.com",
+                    "password": "123456",
+                    "phone_number": "17 99999-9999"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Email address already used."
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Listagem de Usuários",
+        "description": "Esta rota é responsável por listar todos os usuários existentes na base de dados",
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "delete": {
+        "summary": "Deleção de Usuário por id",
+        "description": "Esta rota é responsável por deletar um usuário existente na base de dados",
+        "tags": [
+          "Users"
+        ],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Apaga um registro na base de dados à partir de um identificador",
+            "required": true
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "User not found."
+          },
+          "401": {
+            "description": "Invalid JWT."
+          },
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "summary": "Busca de Usuário por id",
+        "description": "Esta rota é responsável por listar o usuário existente na base de dados pelo identificador",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Busca um registro na base de dados à partir de um identificador",
+            "required": true
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "User not found."
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Alterar usuário por id",
+        "description": "Esta rota é responsável por alterar informações do usuário existente na base de dados pelo identificador",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Busca um registro na base de dados à partir de um identificador",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User",
+                "old_password": ""
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "name": "Nome Completo",
+                    "age": 21,
+                    "email": "teste@email.com",
+                    "password": "123456",
+                    "old_password": "123456",
+                    "phone_number": "17 99999-9999"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "User not found."
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions": {
+      "post": {
+        "summary": "Criação de sessão",
+        "description": "Esta rota é responsável por iniciar uma nova sessão com as credenciais do usuário",
+        "tags": [
+          "Sessions"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "E-mail do usuáiro",
+            "required": true
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "Senha do usuáiro",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Session"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "email": "teste@email.com",
+                    "password": "123456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Incorrect email/password combination."
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/SessionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }, 
+          "email": {
+            "type": "string"
+          }, 
+          "password": {
+            "type": "string"
+          }, 
+          "age": {
+            "type": "number"
+          }, 
+          "phone_number": {
+            "type": "string"
+          }
+        }
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "SessionResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "$ref": "#/components/schemas/User"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
