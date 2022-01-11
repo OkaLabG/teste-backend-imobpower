@@ -68,7 +68,7 @@ As seguintes ferramentas foram usadas na construção do projeto:
 -   **[Docker](https://www.docker.com)**
 -   **[Celebrate](https://github.com/arb/celebrate)**
 -   **[Swagger](https://swagger.io)**
--   **[Bcryot](https://www.npmjs.com/package/bcryptjs)**
+-   **[Bcrypt](https://www.npmjs.com/package/bcryptjs)**
 -   **[JsonWebToken](https://www.npmjs.com/package/jsonwebtoken)**
 
 ---
